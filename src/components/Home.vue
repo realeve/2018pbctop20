@@ -2,10 +2,10 @@
   <div>
     <x-header></x-header>
     <toast v-model="toast.show" :type="toast.type">{{ toast.text }}</toast>
-    <div class="vote" v-for="(item,i) in checkList" :key="item.id">
-      <p class="title">{{i+1}}.{{item.title}}</p>
-      <card>
-        <div slot="content" class="card-content">
+    <div>
+      <div class="vote" v-for="(item,i) in checkList" :key="item.id">
+        <p class="title">{{i+1}}.{{item.title}}</p>
+        <div class="card-content">
           <transition name="v-transition" enter-active-class="animated slideInLeft" leave-active-class="animated slideOutLeft">
             <p class="desc animated" v-show="valueList[i]">{{item.content}}</p>
           </transition>
@@ -15,7 +15,7 @@
             <input type="checkbox" class="weui-switch" v-model="valueList[i]" @on-change="checkMaxVotes(i)">
           </div>
         </div>
-      </card>
+      </div>
     </div>
 
     <p style="margin-top:20px;" v-show="myChecked.length">我的选择</p>
@@ -294,30 +294,54 @@ export default {
 
 <style scoped lang="less">
 @import "../assets/css/switch.css";
-
-.title {
-  color: #233;
-  font-size: 20px;
-  // font-weight: bold;
-  text-align: left;
-  padding: 0 15px;
-}
-
 .switch {
   margin: 5px 0;
   display: flex;
   justify-content: space-between;
 }
 
-.card-content {
-  margin: 10px 15px 0px 15px;
-  .desc {
-    padding-top: 15px;
-    font-size: 16px;
-    line-height: 1.6em;
-    text-indent: 2.3em;
-    letter-spacing: 0.15em;
+.vote {
+  background: #fff;
+  position: relative;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  margin: 20px 10px;
+  padding: 10px 5px;
+
+  .title {
+    color: #233;
+    font-size: 18px;
     text-align: left;
+    padding: 0 15px;
+  }
+
+  .card-content {
+    margin: 10px 15px 0px 15px;
+    .desc {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      font-size: 16px;
+      line-height: 1.6em;
+      text-indent: 2.3em;
+      letter-spacing: 0.15em;
+      text-align: left;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+    &:before {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 20px;
+      overflow: hidden;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6,
+        0 9px 1px -3px rgba(0, 0, 0, 0.2);
+    }
+  }
+  .weui-panel:before {
+    border: none;
   }
 }
 
@@ -330,10 +354,6 @@ export default {
 //   opacity: 0;
 //   height: 0px;
 // }
-
-.vote {
-  margin-bottom: 25px;
-}
 
 .submit {
   margin: 10px 15px 25px 15px;
