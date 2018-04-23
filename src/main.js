@@ -6,6 +6,7 @@ import App from "./App";
 import router from "./router/index";
 
 import store from "./store";
+import "animate.css";
 
 import VueResource from "vue-resource";
 Vue.use(VueResource);
@@ -19,12 +20,12 @@ Vue.use(ToastPlugin);
 // Vue.use(VueTouch, { name: "v-touch" });
 
 router.beforeEach(function(to, from, next) {
-    store.commit("updateLoadingStatus", { isLoading: true });
-    next();
+  store.commit("updateLoadingStatus", { isLoading: true });
+  next();
 });
 
 router.afterEach(function(to) {
-    store.commit("updateLoadingStatus", { isLoading: false });
+  store.commit("updateLoadingStatus", { isLoading: false });
 });
 FastClick.attach(document.body);
 
@@ -32,7 +33,7 @@ Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
-    router,
-    store,
-    render: h => h(App)
+  router,
+  store,
+  render: h => h(App)
 }).$mount("#app-box");

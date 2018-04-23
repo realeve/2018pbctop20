@@ -3,11 +3,13 @@
     <x-header></x-header>
     <toast v-model="toast.show" :type="toast.type">{{ toast.text }}</toast>
     <div class="vote" v-for="(item,i) in checkList" :key="item.id">
-      <p class="title">{{i | chinese}}、{{item.title}}</p>
+      <p class="title">{{i+1}}.{{item.title}}</p>
       <card>
         <div slot="content" class="card-content">
-          <p class="desc">{{item.content}}</p>
-          <div class="weui-cell switch">
+          <transition name="v-transition" enter-active-class="animated slideInLeft" leave-active-class="animated slideOutLeft">
+            <p class="desc animated" v-show="valueList[i]">{{item.content}}</p>
+          </transition>
+          <div class="switch">
             <span>投它一票</span>
             <span>{{progress}}</span>
             <input type="checkbox" class="weui-switch" v-model="valueList[i]" @on-change="checkMaxVotes(i)">
@@ -98,27 +100,23 @@ export default {
     },
     isSportEnd() {
       return moment().format("YYYY-MM-DD") > this.sport.endDate;
+    },
+    isSportNotStart() {
+      return moment().format("YYYY-MM-DD") < this.sport.startDate;
     }
   },
   filters: {
     chinese(i) {
-      return [
-        "一",
-        "二",
-        "三",
-        "四",
-        "五",
-        "六",
-        "七",
-        "八",
-        "九",
-        "十",
-        "十一",
-        "十二",
-        "十三",
-        "十四",
-        "十五"
-      ][i];
+      let num = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
+      let ten = ["", "二", "三", "四", "五", "六", "七", "八", "九"];
+      if (i < 9) {
+        return num[i];
+      }
+      let tenId = Math.floor(i / 10);
+      let numId = i % 10;
+      return numId == 9
+        ? ten[tenId] + "十"
+        : ten[tenId - 1] + "十" + num[numId];
     }
   },
   methods: {
@@ -225,8 +223,10 @@ export default {
           var data = res.data;
           if (data.status > 1) {
             this.$router.push("/info");
+          } else if (this.isSportNotStart) {
+            this.$router.push("/message?status=1");
           } else if (this.isSportEnd) {
-            this.$router.push("message");
+            this.$router.push("/message?status=2");
           }
         })
         .catch(e => {
@@ -264,15 +264,15 @@ export default {
 @import "../assets/css/switch.css";
 
 .title {
-  color: #e84543;
+  color: #233;
   font-size: 20px;
-  font-weight: bold;
+  // font-weight: bold;
   text-align: left;
   padding: 0 15px;
 }
 
 .switch {
-  margin-top: 10px;
+  margin: 5px 0;
   display: flex;
   justify-content: space-between;
 }
@@ -288,6 +288,16 @@ export default {
     text-align: left;
   }
 }
+
+// .v-transition-leave-active,
+// .v-transition-enter-active {
+//   transition: all 1s ease;
+// }
+// .v-transition-leave-to,
+// .v-transition-enter {
+//   opacity: 0;
+//   height: 0px;
+// }
 
 .vote {
   margin-bottom: 25px;

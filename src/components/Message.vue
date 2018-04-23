@@ -2,7 +2,7 @@
   <div>
     <x-header></x-header>
     <div class="content">
-      <msg title="活动结束" description="活动已结束，感谢你的关注！" icon="success"></msg>
+      <msg :title="title" :description="desc" icon="success"></msg>
     </div>
   </div>
 </template>
@@ -16,6 +16,26 @@ export default {
   components: {
     XHeader,
     Msg
+  },
+  data() {
+    return {
+      title: "活动结束",
+      desc: "活动已结束，感谢你的关注！"
+    };
+  },
+  mounted() {
+    let { status } = this.$route.query;
+    if (typeof status === "undefined") {
+      return;
+    }
+    if (status == 1) {
+      this.title = "活动尚未开始";
+      this.desc =
+        "本活动将于" + this.$store.state.sport.startDate + "开始，敬请期待!";
+    } else {
+      this.desc =
+        "本活动已于" + this.$store.state.sport.endDate + "结束，感谢你的关注!";
+    }
   }
 };
 </script>

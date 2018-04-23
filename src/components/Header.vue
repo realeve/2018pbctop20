@@ -1,9 +1,10 @@
 <template>
   <div class="header">
-    <img class="logo" src="../assets/header2.jpg">
+    <img class="logo" src="../assets/header.jpg">
     <div class="title">
-      <h3>中国印钞造币行业2017年<br>“十件大事”评选候选事件
-      </h3>
+      <!-- <h2>中国人民银行</h2> -->
+      <h2>改革开放40周年货币金银大事<br>评选候选事件
+      </h2>
       <h4 class="subtitle">（排名不分先后）</h4>
     </div>
   </div>
@@ -14,9 +15,6 @@
   text-align: center;
   margin-bottom: 70px;
   .title {
-    h3 {
-      font-weight: bold;
-    }
     h4 {
       font-weight: 200;
     }

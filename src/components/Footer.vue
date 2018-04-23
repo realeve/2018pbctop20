@@ -1,6 +1,6 @@
 <template>
   <footer :style="{color}">
-    {{year}} &copy; 中国印钞造币总公司
+    {{year}} &copy; 中国印钞造币总公司提供技术支持
   </footer>
 </template>
 <style lang="less" scoped>
@@ -20,7 +20,7 @@ export default {
   },
   props: {
     color: {
-      default: "#999"
+      default: "#fff"
     }
   }
 };
