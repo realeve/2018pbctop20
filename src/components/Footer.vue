@@ -20,7 +20,7 @@ export default {
   },
   props: {
     color: {
-      default: "#fff"
+      default: "#333"
     }
   }
 };

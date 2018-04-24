@@ -6,7 +6,7 @@
       <div class="vote" v-for="(item,i) in checkList" :key="item.id">
         <p class="title">{{i+1}}.{{item.title}}</p>
         <div class="card-content">
-          <transition name="v-transition" enter-active-class="animated slideInLeft" leave-active-class="animated slideOutLeft">
+          <transition name="v-transition" enter-active-class="animated zoomIn" leave-active-class="animated slideOutLeft">
             <p class="desc animated" v-show="valueList[i]">{{item.content}}</p>
           </transition>
           <div class="switch">
@@ -34,7 +34,7 @@
 
     <div v-transfer-dom>
       <confirm v-model="showModel" title="确认提交" @on-cancel="onCancel" @on-confirm="doSubmit">
-        <p style="text-align:center;" v-if="maxnum < sport.maxTickets">当前共选择{{ maxnum }}项,还可投{{sport.maxTickets - maxnum}}票,是否继续提交?</p>
+        <p style="text-align:center;" v-if="maxnum <= sport.maxTickets">当前共选择{{ maxnum }}项,还可投{{sport.maxTickets - maxnum}}票,是否继续提交?</p>
         <p style="text-align:center;" v-else>当前共选择{{ maxnum }}项,是否继续提交?</p>
       </confirm>
     </div>
@@ -172,11 +172,6 @@ export default {
       this.showModel = false;
     },
     doSubmit() {
-      this.showToast({
-        text: "测试时不提交数据",
-        type: "warn"
-      });
-      return;
       this.getSignature();
       let arr = [];
       this.valueList.forEach((item, i) => {
@@ -203,6 +198,12 @@ export default {
         headimgurl: this.userInfo.headimgurl
       };
 
+      this.showToast({
+        text: "测试时不提交数据",
+        type: "warn"
+      });
+      console.log(params);
+      return;
       let url = this.cdnUrl;
       this.$http
         .jsonp(url, {

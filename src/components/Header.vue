@@ -1,5 +1,6 @@
 <template>
   <div class="header">
+    <Pbc :size="120" />
     <img class="logo" src="../assets/header.jpg">
     <div class="title">
       <!-- <h2>中国人民银行</h2> -->
@@ -14,6 +15,7 @@
 .header {
   text-align: center;
   margin-bottom: 70px;
+  position: relative;
   .title {
     h4 {
       font-weight: 200;
@@ -31,3 +33,11 @@
   }
 }
 </style>
+<script>
+import Pbc from "./Pbclogo";
+export default {
+  components: {
+    Pbc
+  }
+};
+</script>

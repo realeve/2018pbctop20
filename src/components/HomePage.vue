@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="content">
+      <Pbc/>
       <p class="title">
         中国人民银行<br> 改革开放40周年货币金银大事<br>评选活动
       </p>
@@ -29,12 +30,13 @@ import particlesSetting from "../js/particlesSetting";
 import XFooter from "./Footer";
 import { XButton, Toast } from "vux";
 import { mapState } from "vuex";
-
+import Pbc from "./Pbclogo";
 export default {
   components: {
     XButton,
     Toast,
-    XFooter
+    XFooter,
+    Pbc
   },
   data() {
     return {
@@ -98,6 +100,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   flex-direction: column;
