@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <Pbc :size="120" />
+    <!-- <Pbc :size="120" /> -->
     <img class="logo" src="../assets/header.jpg">
     <div class="title">
       <!-- <h2>中国人民银行</h2> -->

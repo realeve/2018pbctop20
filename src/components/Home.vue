@@ -28,13 +28,13 @@
     </div>
 
     <div class="submit">
-      <x-button :disabled="maxnum == 0 || maxnum>=sport.maxTickets" @click.native="submit" type="primary">提交数据</x-button>
+      <x-button :disabled="maxnum == 0 || maxnum>sport.maxTickets" @click.native="submit" type="primary">提交数据</x-button>
       <x-button @click.native="addInfo" type="default">填写个人信息</x-button>
     </div>
 
     <div v-transfer-dom>
       <confirm v-model="showModel" title="确认提交" @on-cancel="onCancel" @on-confirm="doSubmit">
-        <p style="text-align:center;" v-if="maxnum <= sport.maxTickets">当前共选择{{ maxnum }}项,还可投{{sport.maxTickets - maxnum}}票,是否继续提交?</p>
+        <p style="text-align:center;" v-if="maxnum < sport.maxTickets">当前共选择{{ maxnum }}项,还可投{{sport.maxTickets - maxnum}}票,是否继续提交?</p>
         <p style="text-align:center;" v-else>当前共选择{{ maxnum }}项,是否继续提交?</p>
       </confirm>
     </div>
