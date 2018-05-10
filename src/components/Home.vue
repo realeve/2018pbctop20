@@ -2,7 +2,7 @@
   <div>
     <x-header></x-header>
     <toast v-model="toast.show" :type="toast.type">{{ toast.text }}</toast>
-    <div>
+    <div style="margin-top:-30px;">
       <div class="vote" v-for="(item,i) in checkList" :key="item.id">
         <p class="title">{{i+1}}.{{item.title}}</p>
         <div class="card-content">
@@ -10,7 +10,7 @@
             <p class="desc animated" v-show="valueList[i]">{{item.content}}</p>
           </transition>
           <div class="switch">
-            <span>投它一票</span>
+            <span>点击查看详情</span>
             <span>{{progress}}</span>
             <input type="checkbox" class="weui-switch" v-model="valueList[i]" @on-change="checkMaxVotes(i)">
           </div>
@@ -38,7 +38,7 @@
         <p style="text-align:center;" v-else>当前共选择{{ maxnum }}项,是否继续提交?</p>
       </confirm>
     </div>
-    <x-footer/>
+    <x-footer showBg="true" />
   </div>
 
 </template>
@@ -56,7 +56,7 @@ import {
   TransferDomDirective as TransferDom
 } from "vux";
 import XFooter from "./Footer";
-import XHeader from "./Header";
+import XHeader from "./Header2";
 import _checkList from "../js/checkList";
 import util from "../js/common";
 import md5 from "md5";
@@ -308,12 +308,17 @@ export default {
   border-radius: 3px;
   margin: 20px 10px;
   padding: 10px 5px;
-
+  background: url("../assets/card.jpg") no-repeat;
+  background-size: cover;
+  background-position: 50% 100%;
+  background-origin: content-box;
   .title {
-    color: #233;
+    color: #e6232b;
+    color: #333;
     font-size: 18px;
     text-align: left;
     padding: 0 15px;
+    font-weight: bold;
   }
 
   .card-content {
@@ -328,6 +333,7 @@ export default {
       text-align: left;
       border-top: 1px solid #eee;
       border-bottom: 1px solid #eee;
+      font-weight: normal;
     }
     &:before {
       content: "";

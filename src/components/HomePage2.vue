@@ -2,25 +2,12 @@
   <div class="wrapper">
     <div class="content">
       <Pbc/>
-      <p class="title">
-        中国人民银行<br> 改革开放40周年货币金银大事<br>评选活动
-      </p>
-      <p class="desc">
-        刚刚过去的2017年，不忘初心、逐梦前行的祖国和人民都收获满满、幸福满满。肩负为国铸币神圣使命的中国印钞造币总公司也在这一年里取得了靓丽成绩！众志成城的“中钞”人在中国印钞造币总公司董事会党组、党委的领导下，围绕“转型发展”这一核心使命，凝心聚力、砥砺前行，做了不少令人振奋的“大事”。
-      </p>
-      <p class="desc">
-        为向大家全面展示2017年中国印钞造币行业的新发展、新成就、新气象，让大家更加了解中国印钞造币行业、支持中国印钞造币事业，今天小印请您当评委，邀您共同参与中国印钞造币行业2017年“十件大事”评选活动！积极投票还能参加抽奖哦！请在13个选项中选出你认为的“十件大事”。
-      </p>
-      <div class="margin-top-20 time">
-        活动时间：{{sportDate}}
-      </div>
-      <div class="btn-wrapper margin-top-60">
+      <div class="btn-wrapper">
         <div class="weui-btn weui-btn_default" @click="jump('home')">开始投票</div>
       </div>
     </div>
-    <toast v-model="toast.show">{{ toast.msg }}</toast>
     <div class="canvas" id="home"></div>
-    <x-footer color="#fff" />
+    <x-footer color="#000" showBg="false" />
   </div>
 </template>
 <script>
@@ -34,17 +21,8 @@ import Pbc from "./Pbclogo";
 export default {
   components: {
     XButton,
-    Toast,
     XFooter,
     Pbc
-  },
-  data() {
-    return {
-      toast: {
-        show: false,
-        msg: ""
-      }
-    };
   },
   computed: {
     ...mapState(["cdnUrl"]),
@@ -122,21 +100,12 @@ export default {
   width: 100%;
   justify-content: center;
   margin-bottom: 20px;
-  .title {
-    font-size: 18pt;
-    text-align: center;
-    margin-top: 20px;
-  }
-  .desc {
-    padding: 15px;
-    text-indent: 2em;
-  }
-  .time {
-    font-size: 11pt;
-  }
   .btn-wrapper {
-    width: 80%;
+    position: absolute;
+    bottom: 33%;
+    width: 40%;
     font-size: 10pt;
+    opacity: 0.9;
     p {
       padding-bottom: 10px;
     }
@@ -154,8 +123,12 @@ export default {
 }
 
 .weui-btn_default {
-  background: transparent;
+  background: #e92a27;
   color: #fafafa;
+  &:hover {
+    color: #fafafa;
+    background-color: #f36853;
+  }
 }
 
 .weui-btn:after {
