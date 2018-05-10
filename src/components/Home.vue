@@ -308,7 +308,7 @@ export default {
   border-radius: 3px;
   margin: 20px 10px;
   padding: 10px 5px;
-  background: url("../assets/card.jpg") no-repeat;
+  background: url("../assets/card.png") no-repeat;
   background-size: cover;
   background-position: 50% 100%;
   background-origin: content-box;
