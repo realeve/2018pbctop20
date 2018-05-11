@@ -304,35 +304,37 @@ export default {
 .vote {
   background: #fff;
   position: relative;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4), 0 5px 30px 0 rgba(0, 0, 0, 0.15);
   border-radius: 3px;
   margin: 20px 10px;
   padding: 10px 5px;
-  background: url("../assets/card.png") no-repeat;
-  background-size: cover;
-  background-position: 50% 100%;
-  background-origin: content-box;
+  // background: url("../assets/card.png") no-repeat;
+  // background-size: cover;
+  // background-position: 50% 100%;
+  // background-origin: content-box;
+
   .title {
     color: #e6232b;
     color: #333;
     font-size: 18px;
     text-align: left;
-    padding: 0 15px;
+    padding: 0 5px 10px 5px;
     font-weight: bold;
+    border-bottom: 1px solid #eee;
   }
 
   .card-content {
     margin: 10px 15px 0px 15px;
     .desc {
-      padding-top: 10px;
+      // padding-top: 10px;
       padding-bottom: 10px;
       font-size: 16px;
       line-height: 1.6em;
       text-indent: 2.3em;
       letter-spacing: 0.15em;
       text-align: left;
-      border-top: 1px solid #eee;
-      border-bottom: 1px solid #eee;
+      // border-top: 1px solid #eee;
+      // border-bottom: 1px solid #eee;
       font-weight: normal;
     }
     &:before {
@@ -341,10 +343,10 @@ export default {
       right: 0;
       bottom: 0;
       left: 0;
-      height: 20px;
+      height: 50px;
       overflow: hidden;
-      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6,
-        0 9px 1px -3px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 1px 1px rgb(214, 214, 214), 0 8px 0 -3px #f6f6f6,
+        0 9px 1px -3px #b1b1b1;
     }
   }
   .weui-panel:before {
@@ -363,7 +365,7 @@ export default {
 // }
 
 .submit {
-  margin: 10px 15px 25px 15px;
+  margin: 10px 15px 5px 15px;
 }
 .weui-cell__bd p {
   text-align: left;
