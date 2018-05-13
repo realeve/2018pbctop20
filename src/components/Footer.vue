@@ -1,5 +1,5 @@
 <template>
-  <footer :style="{color}" :class={bg:showBg}>
+  <footer :style="{color}" :class="{bg:showBg}">
     {{year}} &copy; 中国印钞造币总公司提供技术支持
   </footer>
 </template>
@@ -10,7 +10,7 @@ footer {
   text-align: center;
 }
 .bg {
-  background: url(/static/img/footer.6212852.png) no-repeat;
+  background: url(../assets/footer.png) no-repeat;
   background-size: cover;
   height: 60px;
   background-position: bottom;

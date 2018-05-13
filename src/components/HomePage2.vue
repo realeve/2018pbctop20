@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="canvas" id="home"></div>
-    <x-footer color="#000" showBg="false" />
+    <x-footer color="#000" :showBg="false" />
   </div>
 </template>
 <script>
@@ -15,58 +15,14 @@ import particles from "particles.js";
 import particlesSetting from "../js/particlesSetting";
 
 import XFooter from "./Footer";
-import { XButton, Toast } from "vux";
-import { mapState } from "vuex";
 import Pbc from "./Pbclogo";
 export default {
   components: {
-    XButton,
     XFooter,
     Pbc
   },
-  computed: {
-    ...mapState(["cdnUrl"]),
-    sport: {
-      get() {
-        return this.$store.state.sport;
-      },
-      set(val) {
-        this.$store.commit("setSport", val);
-      }
-    },
-    sportDate() {
-      let { startDate, endDate } = this.sport;
-      let startInfo = startDate.split("-");
-      let endInfo = endDate.split("-");
-      startInfo[1] = parseInt(startInfo[1], 10);
-      startInfo[2] = parseInt(startInfo[2], 10);
-      endInfo[1] = parseInt(endInfo[1], 10);
-      endInfo[2] = parseInt(endInfo[2], 10);
-
-      // 不同年
-      if (startInfo[0] !== endInfo[0]) {
-        return `${startInfo[0]}年${startInfo[1]}月${startInfo[2]}日 至 ${
-          endInfo[0]
-        }年${endInfo[1]}月${endInfo[2]}日`;
-      }
-
-      // 同年同月
-      if (startInfo[0] === endInfo[1]) {
-        return `${startInfo[0]}年${startInfo[1]}月${startInfo[2]}日 至 ${
-          endInfo[2]
-        }日`;
-      } else {
-        return `${startInfo[0]}年${startInfo[1]}月${startInfo[2]}日 至 ${
-          endInfo[1]
-        }月${endInfo[2]}日`;
-      }
-    }
-  },
   methods: {
     jump(router) {
-      var video = document.querySelector("#mainvideo");
-      // video.play();
-      // video.pause();
       this.$router.push(router);
     }
   },
@@ -133,11 +89,5 @@ export default {
 
 .weui-btn:after {
   border-color: rgba(255, 255, 255, 0.5);
-}
-
-.slogan {
-  padding-top: 15px;
-  font-size: 15pt;
-  color: #f3d713;
 }
 </style>

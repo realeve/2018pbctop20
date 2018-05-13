@@ -3,7 +3,15 @@
     <x-header></x-header>
     <toast v-model="toast.show" :type="toast.type">{{ toast.text }}</toast>
     <div style="margin-top:-30px;">
-      <div class="vote" v-for="(item,i) in checkList" :key="item.id">
+      <div class="vote">
+        <div>
+          投票前请选选择您所属单位
+          <group>
+            <selector title="单位" :options="deptList" v-model="dept_name"></selector>
+          </group>
+        </div>
+      </div>
+      <div class="vote" v-for="(item,i) in checkList" :key="item.id" v-show="dept_name>-1">
         <p class="title">{{i+1}}.{{item.title}}</p>
         <div class="card-content">
           <transition name="v-transition" enter-active-class="animated zoomIn" leave-active-class="animated slideOutLeft">
@@ -27,9 +35,9 @@
       </label>
     </div>
 
-    <div class="submit">
+    <div class="submit" v-show="dept_name>-1">
       <x-button :disabled="maxnum == 0 || maxnum>sport.maxTickets" @click.native="submit" type="primary">提交数据</x-button>
-      <x-button @click.native="addInfo" type="default">填写个人信息</x-button>
+      <!-- <x-button @click.native="addInfo" type="default">填写个人信息</x-button> -->
     </div>
 
     <div v-transfer-dom>
@@ -38,7 +46,7 @@
         <p style="text-align:center;" v-else>当前共选择{{ maxnum }}项,是否继续提交?</p>
       </confirm>
     </div>
-    <x-footer showBg="true" />
+    <x-footer showBg="true" :class="{'fix-bottom':dept_name==-1}" />
   </div>
 
 </template>
@@ -52,12 +60,14 @@ import {
   Divider,
   Toast,
   XButton,
+  Selector,
   Confirm,
   TransferDomDirective as TransferDom
 } from "vux";
 import XFooter from "./Footer";
 import XHeader from "./Header2";
 import _checkList from "../js/checkList";
+import depts from "../js/deptList";
 import util from "../js/common";
 import md5 from "md5";
 import { mapState } from "vuex";
@@ -78,10 +88,12 @@ export default {
     XButton,
     XHeader,
     XFooter,
-    Confirm
+    Confirm,
+    Selector
   },
   data() {
     return {
+      depts,
       valueList: [],
       toast: {
         show: false,
@@ -92,7 +104,8 @@ export default {
       checkList: _checkList, //util.randomArr(_checkList),
       time: new Date().getTime(),
       signature: "",
-      showModel: false
+      showModel: false,
+      dept_name: -1
     };
   },
   computed: {
@@ -124,6 +137,10 @@ export default {
     },
     isSportNotStart() {
       return moment().format("YYYY-MM-DD") < this.sport.startDate;
+    },
+    deptList() {
+      let list = depts;
+      return list.map((value, key) => ({ key, value }));
     }
   },
   filters: {
@@ -369,5 +386,9 @@ export default {
 }
 .weui-cell__bd p {
   text-align: left;
+}
+.fix-bottom {
+  position: absolute;
+  bottom: 0;
 }
 </style>
