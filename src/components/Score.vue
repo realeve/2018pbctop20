@@ -7,7 +7,7 @@
       <p class="desc" v-if="isAdmin">投票情况: {{luckers}} 人选对{{sport.maxTickets}}项</p> 你所投的{{voteNum.length}}位 -->
       <p class="desc">{{sport.name}}评选截止目前总票数如下 </p>
       <group>
-        <cell v-for="user in voteNum" :title="user.id+'.'+user.vote_name+'(第'+user.asc_id+'位，'+user.percent+'%)'" :value="user.vote_nums+' 票'" :key="i"></cell>
+        <cell v-for="user in voteNum" :title="user.id+'.'+user.vote_name+'(第'+user.asc_id+'位，'+user.percent+'%)'" :value="user.vote_nums+' 票'" :key="user.id"></cell>
       </group>
     </div>
     <p class="info"> 各地区票数汇总 </p>
@@ -99,7 +99,6 @@ export default {
             });
             return;
           }
-          this.voteNum = res.data;
           res.data.map((item, id) => {
             item.id = id + 1;
             return item;
@@ -118,7 +117,8 @@ export default {
             item.percent = (item.vote_nums / sum * 100).toFixed(2);
             return item;
           });
-          console.log(ascData);
+          this.voteNum = ascData;
+          // console.log(ascData);
         })
         .catch(e => {
           console.log(e);
@@ -158,7 +158,8 @@ export default {
     //     });
     // },
     getVoteByProv() {
-      let url = this.cdnUrl + "?s=/addon/Api/Api/countVoteByProv";
+      let url =
+        this.cdnUrl + "?s=/addon/Api/Api/countVoteByProv&sid=" + this.sport.id;
 
       this.$http
         .jsonp(url)

@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <!-- <Pbc :size="180" /> -->
-    <img class="logo" src="../assets/header3.png">
+    <img class="logo" src="../assets/header3.jpg">
   </div>
 </template>
 

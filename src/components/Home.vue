@@ -18,7 +18,7 @@
             <p class="desc animated" v-show="valueList[i]">{{item.content}}</p>
           </transition>
           <div class="switch">
-            <span>点击查看详情</span>
+            <span>选中本项查看详情</span>
             <span>{{progress}}</span>
             <input type="checkbox" class="weui-switch" v-model="valueList[i]" @on-change="checkMaxVotes(i)">
           </div>
@@ -272,8 +272,9 @@ export default {
         })
         .then(res => {
           var data = res.data;
+          // console.log(data);
           if (data.status > 1) {
-            this.$router.push("/score");
+            // this.$router.push("/score");
           } else if (this.isSportNotStart) {
             this.$router.push("/message?status=1");
           } else if (this.isSportEnd) {
@@ -300,6 +301,7 @@ export default {
       // }
       this.getStep();
       this.valueList = new Array(_checkList.length).fill(false);
+      this.showList = new Array(_checkList.length).fill(false);
     }
     // addInfo() {
     //   this.$router.push("/info");
