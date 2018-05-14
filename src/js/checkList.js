@@ -122,6 +122,12 @@ let checkList = [{
   }
 ];
 
+let initDB = () => {
+  checkList.map(({
+    title
+  }, vote_id) => `insert into cbpm_vote_list(sid,vote_id,vote_name,vote_nums) values(2,${vote_id},'${title}',0);`).join('\n');
+}
+
 export default checkList.map((item, id) => Object.assign(item, {
   id
 }));

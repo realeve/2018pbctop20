@@ -5,13 +5,13 @@
     <div style="margin-top:-30px;">
       <div class="vote">
         <div>
-          投票前请选选择您所属单位
+          投票前请选择您所属单位
           <group>
-            <selector title="单位" :options="deptList" v-model="dept_name"></selector>
+            <selector title="单位" :options="deptList" v-model="dept_id"></selector>
           </group>
         </div>
       </div>
-      <div class="vote" v-for="(item,i) in checkList" :key="item.id" v-show="dept_name>-1">
+      <div class="vote" v-for="(item,i) in checkList" :key="item.id" v-show="dept_id>-1">
         <p class="title">{{i+1}}.{{item.title}}</p>
         <div class="card-content">
           <transition name="v-transition" enter-active-class="animated zoomIn" leave-active-class="animated slideOutLeft">
@@ -35,7 +35,7 @@
       </label>
     </div>
 
-    <div class="submit" v-show="dept_name>-1">
+    <div class="submit" v-show="dept_id>-1">
       <x-button :disabled="maxnum == 0 || maxnum>sport.maxTickets" @click.native="submit" type="primary">提交数据</x-button>
       <!-- <x-button @click.native="addInfo" type="default">填写个人信息</x-button> -->
     </div>
@@ -46,7 +46,7 @@
         <p style="text-align:center;" v-else>当前共选择{{ maxnum }}项,是否继续提交?</p>
       </confirm>
     </div>
-    <x-footer showBg="true" :class="{'fix-bottom':dept_name==-1}" />
+    <x-footer showBg="true" :class="{'fix-bottom':dept_id==-1}" />
   </div>
 
 </template>
@@ -105,7 +105,7 @@ export default {
       time: new Date().getTime(),
       signature: "",
       showModel: false,
-      dept_name: -1
+      dept_id: -1
     };
   },
   computed: {
@@ -212,15 +212,16 @@ export default {
         city: this.userInfo.city,
         province: this.userInfo.province,
         country: this.userInfo.country,
-        headimgurl: this.userInfo.headimgurl
+        headimgurl: this.userInfo.headimgurl,
+        dept_id: this.dept_id
       };
 
-      this.showToast({
-        text: "测试时不提交数据",
-        type: "warn"
-      });
-      console.log(params);
-      return;
+      // this.showToast({
+      //   text: "测试时不提交数据",
+      //   type: "warn"
+      // });
+      // console.log(params);
+      // return;
       let url = this.cdnUrl;
       this.$http
         .jsonp(url, {
@@ -242,7 +243,7 @@ export default {
             });
             // 跳转提交用户信息
             setTimeout(() => {
-              this.$router.push("/info");
+              this.$router.push("/score");
             }, 500);
           } else {
             this.showToast({
@@ -272,7 +273,7 @@ export default {
         .then(res => {
           var data = res.data;
           if (data.status > 1) {
-            this.$router.push("/info");
+            this.$router.push("/score");
           } else if (this.isSportNotStart) {
             this.$router.push("/message?status=1");
           } else if (this.isSportEnd) {
@@ -299,10 +300,10 @@ export default {
       // }
       this.getStep();
       this.valueList = new Array(_checkList.length).fill(false);
-    },
-    addInfo() {
-      this.$router.push("/info");
     }
+    // addInfo() {
+    //   this.$router.push("/info");
+    // }
   },
   created() {
     this.init();

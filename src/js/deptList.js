@@ -38,4 +38,5 @@ let deptList = [
   "中国金币总公司"
 ];
 
+let initDB = () => deptList.map((item, dept_id) => `insert into cbpm_vote_depts(dept_id,dept_name,sport_id) values(${dept_id},'${item}',2);`).join('\n')
 export default deptList;

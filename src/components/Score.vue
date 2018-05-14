@@ -3,11 +3,11 @@
     <x-header></x-header>
     <div class="score-content">
       <p class="info"> 票数汇总 </p>
-      <p class="desc" v-if="isAdmin">信息填写: {{countInfo.address}} / {{countInfo.alls}}</p>
-      <p class="desc" v-if="isAdmin">投票情况: {{luckers}} 人选对{{sport.maxTickets}}项</p>
-      <p class="desc"> 你所投的{{voteNum.length}}位{{sport.name}}截止目前总票数如下 </p>
+      <!-- <p class="desc" v-if="isAdmin">信息填写: {{countInfo.address}} / {{countInfo.alls}}</p>
+      <p class="desc" v-if="isAdmin">投票情况: {{luckers}} 人选对{{sport.maxTickets}}项</p> 你所投的{{voteNum.length}}位 -->
+      <p class="desc">{{sport.name}}评选截止目前总票数如下 </p>
       <group>
-        <cell v-for="(user,i) in voteNum" :title="(i+1)+'.'+user.vote_name" :value="user.vote_nums+' 票'" :key="i"></cell>
+        <cell v-for="user in voteNum" :title="user.id+'.'+user.vote_name+'(第'+user.asc_id+'位，'+user.percent+'%)'" :value="user.vote_nums+' 票'" :key="i"></cell>
       </group>
     </div>
     <p class="info"> 各地区票数汇总 </p>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import XHeader from "./Header";
+import XHeader from "./Header2";
 import { Cell, Group, Toast, XButton } from "vux";
 import util from "../js/common";
 
@@ -81,9 +81,10 @@ export default {
         sid: this.sport.id,
         openid: this.openid
       };
-      if (this.isAdmin) {
-        params = {};
-      }
+      // if (this.isAdmin) {
+      //   params = {};
+      // }
+
       params.s = "/addon/Api/Api/getVoteCount";
 
       this.$http
@@ -99,44 +100,63 @@ export default {
             return;
           }
           this.voteNum = res.data;
+          res.data.map((item, id) => {
+            item.id = id + 1;
+            return item;
+          });
+          let ascData = res.data.sort(
+            (b, a) => parseInt(a.vote_nums) - parseInt(b.vote_nums)
+          );
+          let sum = 0;
+          ascData.map((item, asc_id) => {
+            item.asc_id = asc_id + 1;
+            sum += parseInt(item.vote_nums);
+            return item;
+          });
+          ascData.sort((b, a) => b.id - a.id);
+          ascData.map(item => {
+            item.percent = (item.vote_nums / sum * 100).toFixed(2);
+            return item;
+          });
+          console.log(ascData);
         })
         .catch(e => {
           console.log(e);
         });
     },
-    getCountInfo() {
-      let url = this.cdnUrl + "?s=/addon/Api/Api/countVoteInfo";
+    // getCountInfo() {
+    //   let url = this.cdnUrl + "?s=/addon/Api/Api/countVoteInfo";
 
-      this.$http
-        .jsonp(url, {
-          params: {
-            sid: this.$store.state.sport.id
-          }
-        })
-        .then(res => {
-          this.countInfo = res.data[0];
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },
-    getPrizeInfo() {
-      let url = this.cdnUrl + "?s=/addon/Api/Api/countPrizeInfo";
+    //   this.$http
+    //     .jsonp(url, {
+    //       params: {
+    //         sid: this.$store.state.sport.id
+    //       }
+    //     })
+    //     .then(res => {
+    //       this.countInfo = res.data[0];
+    //     })
+    //     .catch(e => {
+    //       console.log(e);
+    //     });
+    // },
+    // getPrizeInfo() {
+    //   let url = this.cdnUrl + "?s=/addon/Api/Api/countPrizeInfo";
 
-      this.$http
-        .jsonp(url, {
-          params: {
-            sid: this.$store.state.sport.id,
-            max: this.$store.state.sport.maxTickets
-          }
-        })
-        .then(res => {
-          this.luckers = res.data[0].luckers;
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },
+    //   this.$http
+    //     .jsonp(url, {
+    //       params: {
+    //         sid: this.$store.state.sport.id,
+    //         max: this.$store.state.sport.maxTickets
+    //       }
+    //     })
+    //     .then(res => {
+    //       this.luckers = res.data[0].luckers;
+    //     })
+    //     .catch(e => {
+    //       console.log(e);
+    //     });
+    // },
     getVoteByProv() {
       let url = this.cdnUrl + "?s=/addon/Api/Api/countVoteByProv";
 
@@ -151,11 +171,12 @@ export default {
     },
     init() {
       this.getVoteNums();
-      if (this.isAdmin) {
-        this.getCountInfo();
-        this.getPrizeInfo();
-        this.getVoteByProv();
-      }
+      // if (this.isAdmin) {
+      // this.getCountInfo();
+      // this.getPrizeInfo();
+      // this.getVoteByProv();
+      // }
+      this.getVoteByProv();
     }
   },
   created() {
@@ -168,10 +189,10 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
 .score-content {
-  padding: 15px;
-  padding-top: 10px;
+  padding: 0 15px 15px 15px;
+  // padding-top: 10px;
   .info {
     font-size: 20px;
     font-weight: bold;
@@ -187,11 +208,8 @@ export default {
   .vux-label {
     text-align: left;
   }
-}
-.info {
-  font-size: 20px;
-  font-weight: bold;
-  padding-bottom: 5px;
-  padding-top: 20px;
+  .vux-cell-primary {
+    text-align: left;
+  }
 }
 </style>
