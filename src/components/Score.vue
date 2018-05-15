@@ -181,10 +181,10 @@ export default {
     }
   },
   created() {
-    // if (this.openid == null) {
-    //   this.$router.push("/follow");
-    //   return;
-    // }
+    if (this.openid == null) {
+      this.$router.push("/follow");
+      return;
+    }
     this.init();
   }
 };

@@ -5,20 +5,22 @@
     <div style="margin-top:-30px;">
       <div class="vote">
         <div>
-          投票前请选择您所属单位
+          投票前请选择您所属单位及地区
           <group>
             <selector title="单位" :options="deptList" v-model="dept_id"></selector>
+            <x-address title="地区" v-model="address" raw-value :list="addressData" :required="true" value-text-align="right"></x-address>
           </group>
         </div>
       </div>
-      <div class="vote" v-for="(item,i) in checkList" :key="item.id" v-show="dept_id>-1">
+      <div class="vote" v-for="(item,i) in checkList" :key="item.id" v-show="showVoteInfo">
         <p class="title">{{i+1}}.{{item.title}}</p>
         <div class="card-content">
-          <transition name="v-transition" enter-active-class="animated zoomIn" leave-active-class="animated slideOutLeft">
+          <!-- <transition name="v-transition" enter-active-class="animated zoomIn" leave-active-class="animated slideOutLeft">
             <p class="desc animated" v-show="valueList[i]">{{item.content}}</p>
-          </transition>
+          </transition> -->
+          <p class="desc">{{item.content}}</p>
           <div class="switch">
-            <span>选中本项查看详情</span>
+            <!-- <span>选中本项查看详情</span> -->
             <span>{{progress}}</span>
             <input type="checkbox" class="weui-switch" v-model="valueList[i]" @on-change="checkMaxVotes(i)">
           </div>
@@ -35,7 +37,7 @@
       </label>
     </div>
 
-    <div class="submit" v-show="dept_id>-1">
+    <div class="submit" v-show="showVoteInfo">
       <x-button :disabled="maxnum == 0 || maxnum>sport.maxTickets" @click.native="submit" type="primary">提交数据</x-button>
       <!-- <x-button @click.native="addInfo" type="default">填写个人信息</x-button> -->
     </div>
@@ -46,7 +48,7 @@
         <p style="text-align:center;" v-else>当前共选择{{ maxnum }}项,是否继续提交?</p>
       </confirm>
     </div>
-    <x-footer showBg="true" :class="{'fix-bottom':dept_id==-1}" />
+    <x-footer showBg="true" :class="{'fix-bottom':!showVoteInfo}" />
   </div>
 
 </template>
@@ -62,7 +64,9 @@ import {
   XButton,
   Selector,
   Confirm,
-  TransferDomDirective as TransferDom
+  XAddress,
+  TransferDomDirective as TransferDom,
+  Value2nameFilter as value2name
 } from "vux";
 import XFooter from "./Footer";
 import XHeader from "./Header2";
@@ -72,6 +76,7 @@ import util from "../js/common";
 import md5 from "md5";
 import { mapState } from "vuex";
 
+import ChinaAddressV4Data from "./vux_china_address_v4.json";
 import moment from "moment";
 
 export default {
@@ -89,7 +94,8 @@ export default {
     XHeader,
     XFooter,
     Confirm,
-    Selector
+    Selector,
+    XAddress
   },
   data() {
     return {
@@ -105,7 +111,9 @@ export default {
       time: new Date().getTime(),
       signature: "",
       showModel: false,
-      dept_id: -1
+      dept_id: -1,
+      addressData: ChinaAddressV4Data,
+      address: []
     };
   },
   computed: {
@@ -113,6 +121,9 @@ export default {
     maxnum() {
       let count = this.valueList.filter(item => item);
       return count.length;
+    },
+    showVoteInfo() {
+      return this.dept_id > -1 && this.address.length;
     },
     openid() {
       return this.userInfo.openid;
@@ -188,6 +199,9 @@ export default {
     onCancel() {
       this.showModel = false;
     },
+    getName(value) {
+      return value2name(value, ChinaAddressV4Data);
+    },
     doSubmit() {
       this.getSignature();
       let arr = [];
@@ -199,6 +213,9 @@ export default {
       let addStr = arr
         .map(item => this.getOriginIdx(item))
         .sort((a, b) => a - b);
+
+      let address = this.getName(this.address).split(" ");
+
       let params = {
         s: "/addon/Api/Api/addVoteInfo",
         sid: this.sport.id,
@@ -213,7 +230,10 @@ export default {
         province: this.userInfo.province,
         country: this.userInfo.country,
         headimgurl: this.userInfo.headimgurl,
-        dept_id: this.dept_id
+        dept_id: this.dept_id,
+        prov_name: address[0],
+        city_name: address[1],
+        area_name: address[2]
       };
 
       // this.showToast({
@@ -259,6 +279,24 @@ export default {
     submit() {
       this.showModel = true;
     },
+    getUserAddr() {
+      let url = this.cdnUrl;
+      let params = {
+        s: "/addon/Api/Api/getUserAddr",
+        openid: this.openid
+      };
+      this.$http
+        .jsonp(url, {
+          params
+        })
+        .then(({ data }) => {
+          if (data.length === 0) {
+            return;
+          }
+          let { prov_name, city_name, area_name } = data[0];
+          this.address = [prov_name, city_name, area_name];
+        });
+    },
     getStep() {
       let url = this.cdnUrl;
       let params = {
@@ -274,7 +312,7 @@ export default {
           var data = res.data;
           // console.log(data);
           if (data.status > 1) {
-            // this.$router.push("/score");
+            this.$router.push("/score");
           } else if (this.isSportNotStart) {
             this.$router.push("/message?status=1");
           } else if (this.isSportEnd) {
@@ -285,20 +323,21 @@ export default {
           console.log(e);
         });
     },
-    // auth() {
-    //   if (this.userInfo.openid == null) {
-    //     this.$router.push("/follow");
-    //     return false;
-    //   }
-    //   return true;
-    // },
+    auth() {
+      if (this.userInfo.openid == null) {
+        this.$router.push("/follow");
+        return false;
+      }
+      return true;
+    },
     init() {
-      // if (!this.$store.state.isDebug) {
-      //   let passed = this.auth();
-      //   if (!passed) {
-      //     return;
-      //   }
-      // }
+      if (!this.$store.state.isDebug) {
+        let passed = this.auth();
+        if (!passed) {
+          return;
+        }
+      }
+      this.getUserAddr();
       this.getStep();
       this.valueList = new Array(_checkList.length).fill(false);
       this.showList = new Array(_checkList.length).fill(false);
