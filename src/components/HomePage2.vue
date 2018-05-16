@@ -28,7 +28,7 @@ export default {
   },
   mounted() {
     particlesJS("home", particlesSetting);
-    document.title = this.sport.name;
+    document.title = this.$store.state.sport.name;
   }
 };
 </script>

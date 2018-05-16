@@ -10,7 +10,7 @@
         <cell v-for="user in voteNum" :title="user.id+'.'+user.vote_name+'(第'+user.asc_id+'位，'+user.percent+'%)'" :value="user.vote_nums+' 票'" :key="user.id"></cell>
       </group>
     </div>
-    <p class="info"> 各地区票数汇总 </p>
+    <p class="info"> 各地区参与人数汇总 </p>
     <group style="margin-bottom:20px;">
       <cell v-for="(item,i) in provInfo" :title="item.prov" :value="item.num+' 票'" :key="i"></cell>
     </group>
