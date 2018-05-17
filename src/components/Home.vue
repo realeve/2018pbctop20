@@ -323,7 +323,7 @@ export default {
           var data = res.data;
           // console.log(data);
           if (data.status > 1) {
-            // this.$router.push("/score");
+            this.$router.push("/score");
           } else if (this.isSportNotStart) {
             this.$router.push("/message?status=1");
           } else if (this.isSportEnd) {
