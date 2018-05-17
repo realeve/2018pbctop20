@@ -8,6 +8,7 @@
           投票前请选择您所属单位及地区
           <group>
             <selector title="单位" :options="deptList" v-model="dept_id"></selector>
+            <selector title="下属企业" :options="companyList" v-show="dept_id==35" v-model="company_name"></selector>
             <x-address title="地区" v-model="address" raw-value :list="addressData" :required="true" value-text-align="right"></x-address>
           </group>
         </div>
@@ -71,6 +72,8 @@ import {
 import XFooter from "./Footer";
 import XHeader from "./Header2";
 import _checkList from "../js/checkList";
+import companyList from "../js/companyList";
+
 import depts from "../js/deptList";
 import util from "../js/common";
 import md5 from "md5";
@@ -113,13 +116,21 @@ export default {
       showModel: false,
       dept_id: -1,
       addressData: ChinaAddressV4Data,
-      address: []
+      address: [],
+      companyList,
+      company_name: ""
     };
   },
   computed: {
     ...mapState(["cdnUrl", "sport", "userInfo"]),
     maxnum() {
       let count = this.valueList.filter(item => item);
+      if (count.length > this.sport.maxTickets) {
+        this.showToast({
+          text: "请勿超过" + this.sport.maxTickets + "票",
+          type: "warn"
+        });
+      }
       return count.length;
     },
     showVoteInfo() {
@@ -215,14 +226,14 @@ export default {
         .sort((a, b) => a - b);
 
       let address = this.getName(this.address).split(" ");
-
+      let company_name = this.dept_id != 35 ? "" : this.company_name;
       let params = {
         s: "/addon/Api/Api/addVoteInfo",
         sid: this.sport.id,
         timestamp: this.time,
         signature: this.signature,
         addstr: addStr.join(","),
-
+        company_name,
         openid: this.userInfo.openid,
         nickname: this.userInfo.nickname,
         sex: this.userInfo.sex,
@@ -312,7 +323,7 @@ export default {
           var data = res.data;
           // console.log(data);
           if (data.status > 1) {
-            this.$router.push("/score");
+            // this.$router.push("/score");
           } else if (this.isSportNotStart) {
             this.$router.push("/message?status=1");
           } else if (this.isSportEnd) {
