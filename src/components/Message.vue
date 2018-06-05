@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import XHeader from "./Header";
+import XHeader from "./Header2";
 import util from "../js/common";
 import { Msg } from "vux";
 

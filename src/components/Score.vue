@@ -181,7 +181,7 @@ export default {
     }
   },
   created() {
-    if (this.openid == null) {
+    if (this.openid == null || location.href.indexOf("from=") > 0) {
       this.$router.push("/follow");
       return;
     }

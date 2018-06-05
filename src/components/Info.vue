@@ -45,7 +45,7 @@ import {
 
 import ChinaAddressV4Data from "./vux_china_address_v4.json";
 
-import XHeader from "./Header";
+import XHeader from "./Header2";
 import util from "../js/common";
 import XFooter from "./Footer";
 

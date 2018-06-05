@@ -335,7 +335,7 @@ export default {
         });
     },
     auth() {
-      if (this.userInfo.openid == null) {
+      if (this.userInfo.openid == null || location.href.indexOf("from=") > 0) {
         this.$router.push("/follow");
         return false;
       }

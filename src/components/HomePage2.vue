@@ -22,11 +22,19 @@ export default {
     Pbc
   },
   methods: {
+    auth() {
+      if (location.href.indexOf("from=") > 0) {
+        this.$router.push("/follow");
+        return false;
+      }
+      return true;
+    },
     jump(router) {
       this.$router.push(router);
     }
   },
   mounted() {
+    this.auth();
     particlesJS("home", particlesSetting);
     document.title = this.$store.state.sport.name;
   }
