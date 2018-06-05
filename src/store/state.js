@@ -31,8 +31,8 @@ const state = {
     maxTickets: 20,
     allTickets: 40,
     loadWXInfo: true,
-    startDate: "2018-04-10",
-    endDate: "2018-05-31"
+    startDate: "2018-06-05",
+    endDate: "2018-06-21"
   }
 };
 
