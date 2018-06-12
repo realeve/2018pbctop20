@@ -136,14 +136,22 @@ export default {
     },
     // 获取微信用户信息（昵称，地区）
     getWXUserInfo() {
+      // let userInfo;
+      // let wx_userinfo = localStorage["wx_userinfo"];
+      // if (typeof wx_userinfo != "undefined") {
+      //   userInfo = JSON.parse(wx_userinfo);
+      //   this.userInfo = userInfo;
+      //   return;
+      // }
+      // this.getWXInfo();
       let userInfo;
-      let wx_userinfo = localStorage["wx_userinfo"];
-      if (typeof wx_userinfo != "undefined") {
-        userInfo = JSON.parse(wx_userinfo);
-        this.userInfo = userInfo;
+      let wx_userinfo = localStorage.getItem("wx_userinfo");
+      if (null == wx_userinfo || typeof wx_userinfo == "undefined") {
+        this.getWXInfo();
         return;
       }
-      this.getWXInfo();
+      userInfo = JSON.parse(wx_userinfo);
+      this.userInfo = userInfo;
     },
     getWXInfo() {
       let params = {
