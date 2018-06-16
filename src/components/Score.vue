@@ -6,16 +6,21 @@
       <!-- <p class="desc" v-if="isAdmin">信息填写: {{countInfo.address}} / {{countInfo.alls}}</p>
       <p class="desc" v-if="isAdmin">投票情况: {{luckers}} 人选对{{sport.maxTickets}}项</p> 你所投的{{voteNum.length}}位 -->
       <p class="desc">{{sport.name}}评选截止目前总票数如下 </p>
+      <x-switch title="按票数排序" v-model="voteShowMode"></x-switch>
       <group>
-        <cell v-for="user in voteNum" :title="user.id+'.'+user.vote_name+'(第'+user.asc_id+'位，'+user.percent+'%)'" :value="user.vote_nums+' 票'" :key="user.id"></cell>
+        <cell v-for="(user,i) in voteNum" :title="(i+1)+'.'+user.vote_name+'(第'+user.asc_id+'位，'+user.percent+'%)'" :value="user.vote_nums+' 票'" :key="user.id"></cell>
       </group>
     </div>
     <p class="info"> 各地区参与人数汇总 </p>
     <group style="margin-bottom:20px;">
       <cell v-for="(item,i) in provInfo" :title="item.prov" :value="item.num+' 票'" :key="i"></cell>
     </group>
+    <group v-if="isAdmin">
+      <panel header="总公司本部投票人员名单" :list="cbpmVoters" type="1"></panel>
+    </group>
     <div style="margin:0 20px 20px 20px;">
-      <x-button @click.native="init" type="primary">刷新数据</x-button>
+      <x-button @click.native="dataMap" type="primary">数据地图</x-button>
+      <x-button @click.native="init">刷新数据</x-button>
     </div>
     <x-footer/>
   </div>
@@ -23,7 +28,7 @@
 
 <script>
 import XHeader from "./Header2";
-import { Cell, Group, Toast, XButton } from "vux";
+import { Cell, Group, Toast, XButton, Panel, XSwitch } from "vux";
 import util from "../js/common";
 
 import { mapState } from "vuex";
@@ -35,7 +40,9 @@ export default {
     Cell,
     Group,
     Toast,
-    XFooter
+    XFooter,
+    Panel,
+    XSwitch
   },
   data() {
     return {
@@ -45,7 +52,9 @@ export default {
         address: ""
       },
       luckers: "",
-      provInfo: ""
+      provInfo: "",
+      cbpmVoters: [],
+      voteShowMode: false
     };
   },
   computed: {
@@ -63,6 +72,15 @@ export default {
           .join(" ")
           .indexOf(this.openid) > -1
       );
+    }
+  },
+  watch: {
+    voteShowMode(val) {
+      if (val) {
+        this.voteNum.sort((b, a) => a.vote_nums - b.vote_nums);
+        return;
+      }
+      this.voteNum.sort((a, b) => a.id - b.id);
     }
   },
   methods: {
@@ -170,6 +188,23 @@ export default {
           console.log(e);
         });
     },
+    getCBPMVoters() {
+      let url = this.cdnUrl + "?s=/addon/Api/Api/getCBPMVoters";
+      this.$http
+        .jsonp(url)
+        .then(res => {
+          this.cbpmVoters = res.data.map((item, i) => {
+            item.title = i + 1 + "." + item.title;
+            return item;
+          });
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    dataMap() {
+      window.location.href = "http://www.cbpc.ltd/public/topic/201805led";
+    },
     init() {
       this.getVoteNums();
       // if (this.isAdmin) {
@@ -178,6 +213,9 @@ export default {
       // this.getVoteByProv();
       // }
       this.getVoteByProv();
+      if (this.isAdmin) {
+        this.getCBPMVoters();
+      }
     }
   },
   created() {
@@ -190,7 +228,7 @@ export default {
 };
 </script>
 
-<style lang="less" >
+<style lang="less" scoped>
 .score-content {
   padding: 0 15px 15px 15px;
   // padding-top: 10px;

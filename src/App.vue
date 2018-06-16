@@ -247,4 +247,8 @@ export default {
 //   min-height: 100vh;
 //   z-index: 1;
 // }
+
+.weui-media-box__bd {
+  text-align: left;
+}
 </style>
