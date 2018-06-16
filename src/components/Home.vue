@@ -227,6 +227,8 @@ export default {
 
       let address = this.getName(this.address).split(" ");
       let company_name = this.dept_id != 35 ? "" : this.company_name;
+      company_name =
+        company_name == "总公司本部" ? "中国印钞造币总公司" : company_name;
       let params = {
         s: "/addon/Api/Api/addVoteInfo",
         sid: this.sport.id,
